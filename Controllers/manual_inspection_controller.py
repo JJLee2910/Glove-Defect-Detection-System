@@ -14,3 +14,4 @@ class ManualInspectionController(QMainWindow):
     def go_dashboard(self):
         print("0")
         self.router.setCurrentIndex(0)
+        

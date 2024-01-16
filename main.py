@@ -8,6 +8,9 @@ from Controllers.manual_inspection_controller import ManualInspectionController
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 
+
+
+
 # Add ur pages here and access by index.
 def add_pages(router):
     dashboard_page = main_dashboard_controller.MainDashboardController(router)

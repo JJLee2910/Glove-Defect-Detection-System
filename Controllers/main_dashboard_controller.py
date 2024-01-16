@@ -9,9 +9,11 @@ class MainDashboardController(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.router = router
+        self.should_reset_combo = False
 
         # add your event listeners here
         self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
+
 
     def switch_manual_inspection_screen(self):
         selected_option = self.ui.ManualinspectionBox.currentText()
@@ -19,3 +21,4 @@ class MainDashboardController(QMainWindow):
         if selected_option == "Latex Glove":
             print("1")
             self.router.setCurrentIndex(1)
+

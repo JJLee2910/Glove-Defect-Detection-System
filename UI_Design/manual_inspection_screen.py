@@ -277,8 +277,6 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Start Detection"))
         self.pushButton_2.setText(_translate("MainWindow", "Add Image"))
         self.info_label.setText(_translate("MainWindow", "Asia Pacific University IPPR Assignment"))
-import resources_rc
-
 
 if __name__ == "__main__":
     import sys

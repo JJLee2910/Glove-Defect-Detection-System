@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from UI_Design import resources_rc
 
 
 class Ui_MainWindow(object):
@@ -261,7 +262,7 @@ class Ui_MainWindow(object):
         self.dashboard_label.setText(_translate("MainWindow", "Dashboard"))
         self.defect_chart_labe.setText(_translate("MainWindow", "Glove Defect Bar Chart"))
         self.info_label.setText(_translate("MainWindow", "Asia Pacific University IPPR Assignment"))
-import resources_rc
+
 
 
 if __name__ == "__main__":

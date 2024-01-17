@@ -7,6 +7,13 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter
 from PyQt5.QtChart import QBarSet, QBarSeries, QChart, QBarCategoryAxis, QChartView, QValueAxis
 
+class DefectDAO:
+    def __init__(self,csv_path='Database\\data.csv'):
+        self.csv_path = csv_path
+    
+    def get_data(self):
+        return pd.read_csv(self.csv_path)
+
 class MainDashboardController(QMainWindow):
     def __init__(self, router):
         super(MainDashboardController, self).__init__()
@@ -14,9 +21,8 @@ class MainDashboardController(QMainWindow):
         self.ui.setupUi(self)
         self.router = router
 
-        # Load your data from the CSV file (adjust the path accordingly)
-        csv_path = 'Database\\data.csv'
-        self.data = pd.read_csv(csv_path, parse_dates=['Date'], dayfirst=True)
+        self.defectDao = DefectDAO()
+        self.data = self.defectDao.get_data()
 
         # Create a chart and add it to the layout
         self.chart = self.create_defect_count_chart()

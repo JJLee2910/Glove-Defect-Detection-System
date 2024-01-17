@@ -15,6 +15,7 @@ class MainDashboardController(QMainWindow):
 
     def switch_manual_inspection_screen(self):
         selected_option = self.ui.ManualinspectionBox.currentText()
+        self.ui.ManualinspectionBox.setCurrentIndex(0)
 
         if selected_option == "Latex Glove":
             print("1")

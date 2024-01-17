@@ -22,4 +22,5 @@ class MainDashboardController(QMainWindow):
         if selected_option == "Latex Glove":
             print("1")
             self.router.setCurrentIndex(1)
+    
 

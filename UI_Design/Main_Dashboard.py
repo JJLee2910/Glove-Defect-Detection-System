@@ -9,19 +9,28 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from UI_Design import resources_rc
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(873, 600)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        MainWindow.resize(996, 701)
+        MainWindow.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.MSWindowsFixedSizeDialogHint)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
+        MainWindow.setMinimumSize(QtCore.QSize(996, 701))
+        MainWindow.setMaximumSize(QtCore.QSize(996, 701))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
+        self.centralwidget.setMinimumSize(QtCore.QSize(996, 701))
+        self.centralwidget.setMaximumSize(QtCore.QSize(996, 701))
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -262,7 +271,7 @@ class Ui_MainWindow(object):
         self.dashboard_label.setText(_translate("MainWindow", "Dashboard"))
         self.defect_chart_labe.setText(_translate("MainWindow", "Glove Defect Bar Chart"))
         self.info_label.setText(_translate("MainWindow", "Asia Pacific University IPPR Assignment"))
-
+from UI_Design import resources_rc
 
 
 if __name__ == "__main__":

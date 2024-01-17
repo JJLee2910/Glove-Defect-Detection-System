@@ -79,3 +79,6 @@ class MainDashboardController(QMainWindow):
         bar_series.attachAxis(y_axis)
 
         return chart
+
+    def closeBtn(self):
+        pass

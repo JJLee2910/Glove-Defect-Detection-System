@@ -5,10 +5,7 @@ from Controllers import main_dashboard_controller, manual_inspection_controller
 from UI_Design.Main_Dashboard import *
 from UI_Design.test import *
 from Controllers.manual_inspection_controller import ManualInspectionController
-
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
-
-
 
 
 # Add ur pages here and access by index.

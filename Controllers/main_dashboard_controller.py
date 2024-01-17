@@ -3,13 +3,12 @@ from UI_Design.test import *
 from Controllers.manual_inspection_controller import ManualInspectionController
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QGraphicsView, QGraphicsScene, QVBoxLayout
 import pandas as pd
-from PyQt5.QtCore import Qt, QDateTime
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter
-from PyQt5.QtChart import QLineSeries, QDateTimeAxis, QValueAxis, QChart, QChartView, QBarSet, QBarSeries
-
+from PyQt5.QtChart import QBarSet, QBarSeries, QChart, QBarCategoryAxis, QChartView, QValueAxis
 
 class MainDashboardController(QMainWindow):
-    def __init__(self, router: QStackedWidget):
+    def __init__(self, router):
         super(MainDashboardController, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -20,7 +19,7 @@ class MainDashboardController(QMainWindow):
         self.data = pd.read_csv(csv_path, parse_dates=['Date'], dayfirst=True)
 
         # Create a chart and add it to the layout
-        self.chart = self.create_time_series_chart()
+        self.chart = self.create_defect_count_chart()
         chart_view = QChartView(self.chart)
         chart_view.setRenderHint(QPainter.Antialiasing)
 
@@ -29,7 +28,6 @@ class MainDashboardController(QMainWindow):
         # add your event listeners here
         self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
 
-
     def switch_manual_inspection_screen(self):
         selected_option = self.ui.ManualinspectionBox.currentText()
         self.ui.ManualinspectionBox.setCurrentIndex(0)
@@ -37,36 +35,32 @@ class MainDashboardController(QMainWindow):
         if selected_option == "Latex Glove":
             print("1")
             self.router.setCurrentIndex(1)
-    
 
-    def create_time_series_chart(self):
+    def create_defect_count_chart(self):
         chart = QChart()
-        chart.setTitle("Defects Over Time")
 
-        # Create a bar series for each type of defect
+        # Get unique defect types
         defect_types = self.data['Type of Defect'].unique()
+
+        # Create a bar set for each type of defect
+        bar_set = QBarSet("Defect Count")
+
+        # Count occurrences of each defect type
+        defect_counts = self.data['Type of Defect'].value_counts()
+
+        # Add data to the bar set
         for defect_type in defect_types:
-            bar_set = QBarSet(defect_type)
+            count = defect_counts.get(defect_type, 0)
+            bar_set.append(count)
 
-            # Filter data for the current defect type
-            defect_data = self.data[self.data['Type of Defect'] == defect_type]
+        # Create a bar series and add the bar set to it
+        bar_series = QBarSeries()
+        bar_series.append(bar_set)
+        chart.addSeries(bar_series)
 
-            # Count occurrences of each date
-            date_counts = defect_data['Date'].value_counts().sort_index()
-
-            # Add data to the bar set
-            for date, count in date_counts.items():
-                bar_set.append(count)
-
-            # Create a bar series and add the bar set to it
-            bar_series = QBarSeries()
-            bar_series.append(bar_set)
-            chart.addSeries(bar_series)
-
-        # Configure the x-axis with QDateTimeAxis
-        x_axis = QDateTimeAxis()
-        x_axis.setFormat("dd/MM/yyyy")
-        x_axis.setTitleText("Date")
+        # Configure the x-axis with QBarCategoryAxis
+        x_axis = QBarCategoryAxis()
+        x_axis.append(defect_types)
         chart.addAxis(x_axis, Qt.AlignBottom)
 
         # Configure the y-axis with QValueAxis
@@ -75,8 +69,7 @@ class MainDashboardController(QMainWindow):
         chart.addAxis(y_axis, Qt.AlignLeft)
 
         # Attach the axes to the series
-        for series in chart.series():
-            series.attachAxis(x_axis)
-            series.attachAxis(y_axis)
+        bar_series.attachAxis(x_axis)
+        bar_series.attachAxis(y_axis)
 
         return chart

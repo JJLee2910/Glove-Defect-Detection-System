@@ -3,7 +3,7 @@ from UI_Design.test import *
 from Controllers.manual_inspection_controller import ManualInspectionController
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QGraphicsView, QGraphicsScene, QVBoxLayout
 import pandas as pd
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDateTime
 from PyQt5.QtGui import QPainter
 from PyQt5.QtChart import QLineSeries, QDateTimeAxis, QValueAxis, QChart, QChartView, QBarSet, QBarSeries
 
@@ -15,20 +15,16 @@ class MainDashboardController(QMainWindow):
         self.ui.setupUi(self)
         self.router = router
 
-        self.chart = QChart()
-        series = QBarSeries()
-        set0 = QBarSet("Series 1")
-        set0.append([1, 2, 3, 4, 5])  # Sample data for the chart
-        series.append(set0)
-        self.chart.addSeries(series)
+        # Load your data from the CSV file (adjust the path accordingly)
+        csv_path = 'Database\\data.csv'
+        self.data = pd.read_csv(csv_path, parse_dates=['Date'], dayfirst=True)
 
+        # Create a chart and add it to the layout
+        self.chart = self.create_time_series_chart()
         chart_view = QChartView(self.chart)
         chart_view.setRenderHint(QPainter.Antialiasing)
 
         self.ui.gridLayout.addWidget(chart_view)
-
-        # Add your event listeners here
-        self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
 
         # add your event listeners here
         self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
@@ -43,69 +39,44 @@ class MainDashboardController(QMainWindow):
             self.router.setCurrentIndex(1)
     
 
-    # def create_time_series_chart(self):
-    #     csv_path = "Database\\data.csv"
+    def create_time_series_chart(self):
+        chart = QChart()
+        chart.setTitle("Defects Over Time")
 
-    #     try:
-    #         # Load data from CSV using pandas
-    #         df = pd.read_csv(csv_path)
+        # Create a bar series for each type of defect
+        defect_types = self.data['Type of Defect'].unique()
+        for defect_type in defect_types:
+            bar_set = QBarSet(defect_type)
 
-    #         # Convert the 'date' column to datetime format
-    #         df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+            # Filter data for the current defect type
+            defect_data = self.data[self.data['Type of Defect'] == defect_type]
 
-    #         grouped_df = df.groupby(['Date', 'Type of Defect']).size().reset_index(name='Count').rename(columns={0: 'Count'})
+            # Count occurrences of each date
+            date_counts = defect_data['Date'].value_counts().sort_index()
 
-    #         # Get unique types of defects
-    #         unique_defects = df['Type of Defect'].unique()
+            # Add data to the bar set
+            for date, count in date_counts.items():
+                bar_set.append(count)
 
-    #         # Create a chart
-    #         unique_defects = grouped_df['Type of Defect'].unique()
+            # Create a bar series and add the bar set to it
+            bar_series = QBarSeries()
+            bar_series.append(bar_set)
+            chart.addSeries(bar_series)
 
-    #         # Create a chart
-    #         chart = QChart()
-    #         # chart.setTitle("Time Series Chart")
+        # Configure the x-axis with QDateTimeAxis
+        x_axis = QDateTimeAxis()
+        x_axis.setFormat("dd/MM/yyyy")
+        x_axis.setTitleText("Date")
+        chart.addAxis(x_axis, Qt.AlignBottom)
 
-    #         # Create and add line series for each type of defect
-    #         for defect_type in unique_defects:
-    #             series = QLineSeries()
-    #             series.setName(defect_type)
+        # Configure the y-axis with QValueAxis
+        y_axis = QValueAxis()
+        y_axis.setTitleText("Count")
+        chart.addAxis(y_axis, Qt.AlignLeft)
 
-    #             # Filter dataframe for the current defect type
-    #             filtered_df = grouped_df[grouped_df['Type of Defect'] == defect_type]
+        # Attach the axes to the series
+        for series in chart.series():
+            series.attachAxis(x_axis)
+            series.attachAxis(y_axis)
 
-    #             # Add data points to the series
-    #             for index, row in filtered_df.iterrows():
-    #                 series.append(row['Date'].timestamp() * 1000, row['Count'])
-
-    #             chart.addSeries(series)
-
-    #         # Configure axes
-    #         axis_x = QDateTimeAxis()
-    #         axis_x.setFormat("yyyy-MM-dd")  # Set the date format as needed
-    #         chart.addAxis(axis_x, Qt.AlignBottom)
-
-    #         axis_y = QValueAxis()
-    #         chart.addAxis(axis_y, Qt.AlignLeft)
-
-    #         # Attach axes to series
-    #         for series in chart.series():
-    #             series.attachAxis(axis_x)
-    #             series.attachAxis(axis_y)
-
-    #         # Create chart view
-    #         chart_view = QChartView(chart)
-    #         chart_view.setRenderHint(QPainter.Antialiasing)
-
-    #         # Clear existing layout if any
-    #         # Check if layout is already set
-    #         if self.chart.layout() is None:
-    #             # Set the chart view as the central widget
-    #             layout = QVBoxLayout(self.chart)
-    #             layout.addWidget(chart_view)
-
-    #     except FileNotFoundError:
-    #         print(f"Error: File '{csv_path}' not found.")
-    #     except pd.errors.EmptyDataError:
-    #         print(f"Error: File '{csv_path}' is empty.")
-    #     except Exception as e:
-    #         print(f"An error occurred: {e}")
+        return chart

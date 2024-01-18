@@ -16,6 +16,12 @@ def add_pages(router):
     manual_inspection_page = manual_inspection_controller.ManualInspectionController(router)
     router.addWidget(manual_inspection_page)
 
+    # logReportPage = False # Replace false with log report page connection
+    # router.addWidget(logReportPage)
+
+    # simulation_page = False # Replace False with simulation page connection
+    # router.addWidget(simulation_page)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

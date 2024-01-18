@@ -1,5 +1,7 @@
 from UI_Design.manual_inspection_screen import *
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QFileDialog
+from PyQt5.QtCore import QDir
+from PyQt5.QtGui import QPixmap
 
 class ManualInspectionController(QMainWindow):
     def __init__(self, router: QStackedWidget):
@@ -10,8 +12,19 @@ class ManualInspectionController(QMainWindow):
 
         # add your event listeners here
         self.ui.DashboardButton.clicked.connect(self.go_dashboard)
+        self.ui.AddImageBtn.clicked.connect(self.add_image)
+        self.ui.StartDetectionBtn.clicked.connect(self.start_detection)
 
     def go_dashboard(self):
         print("0")
         self.router.setCurrentIndex(0)
         
+    def add_image(self, filename=None):
+        if not filename:
+            filename, _ = QFileDialog.getOpenFileName(self, 'Select Photo', QDir.currentPath(), 'Images (*.png *.jpg *.jpeg)')
+            if not filename:
+                return
+        self.ui.PictureLabel.setPixmap(QPixmap(filename))
+
+    def start_detection(self):
+        pass

@@ -46,11 +46,11 @@ class MainDashboardController(QMainWindow):
 
     def switch_log_screen(self):
         if self.ui.LogReportButton.isChecked() == False:
-            print(3)
+            print("2")
 
     def switch_simulation_screen(self):
         if self.ui.SimulationButton.isChecked() == False:
-            print("2")
+            print("3")
 
     def create_defect_count_chart(self):
         chart = QChart()

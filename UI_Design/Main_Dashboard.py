@@ -202,12 +202,11 @@ class Ui_MainWindow(object):
         self.ManualinspectionBox.setItemText(0, _translate("MainWindow", "Manual Inspection"))
         self.ManualinspectionBox.setItemText(1, _translate("MainWindow", "Latex Glove"))
         self.ManualinspectionBox.setItemText(2, _translate("MainWindow", "Plastic Glove"))
-        self.ManualinspectionBox.setItemText(3, _translate("MainWindow", "Idk what Glove"))
-        self.ManualinspectionBox.setItemText(4, _translate("MainWindow", "What Glove"))
+        self.ManualinspectionBox.setItemText(3, _translate("MainWindow", "SiliconeGlove"))
+        self.ManualinspectionBox.setItemText(4, _translate("MainWindow", "Cloth Glove"))
         self.SimulationButton.setText(_translate("MainWindow", "Simulation"))
         self.defect_chart_labe.setText(_translate("MainWindow", "Glove Defect Bar Chart"))
         self.info_label.setText(_translate("MainWindow", "Asia Pacific University IPPR Assignment"))
-
 from UI_Design import resources_rc
 
 

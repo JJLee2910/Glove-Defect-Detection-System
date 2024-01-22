@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from tools.FindLatex import findLatexContour, findDirtColor
+
 
 class DirtDetector:
     def __init__(self, img) -> None:
@@ -7,4 +9,16 @@ class DirtDetector:
 
     def detect(self):
         # Find the mask of the latex
-        pass 
+        latexContour = findLatexContour(self.img)
+
+        overlay = np.zeros((self.img.shape[0], self.img.shape[1],4),
+                           dtype="uint8")
+        
+        if latexContour is None:
+            return overlay
+        
+        # find the stain mask
+        dirt_contour = findDirtColor(self.img)
+
+        # find the min area of the rectangle
+        

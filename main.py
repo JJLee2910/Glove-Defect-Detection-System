@@ -1,7 +1,7 @@
 import os
 import sys
 
-from Controllers import main_dashboard_controller, manual_inspection_controller
+from Controllers import main_dashboard_controller, manual_inspection_controller, log_controller
 from UI_Design.Main_Dashboard import *
 from UI_Design.test import *
 from Controllers.manual_inspection_controller import ManualInspectionController
@@ -12,6 +12,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 def add_pages(router):
     dashboard_page = main_dashboard_controller.MainDashboardController(router)
     router.addWidget(dashboard_page)
+
+    log_page = log_controller.LogController(router)
+    router.addWidget(log_page)
 
     manual_inspection_page = manual_inspection_controller.ManualInspectionController(router)
     router.addWidget(manual_inspection_page)

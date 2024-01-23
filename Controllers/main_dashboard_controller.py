@@ -33,6 +33,8 @@ class MainDashboardController(QMainWindow):
 
         # add your event listeners here
         self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
+        self.ui.SimulationButton.clicked.connect(self.switch_simulation_screen)
+        self.ui.LogReportButton.clicked.connect(self.switch_log_screen)
 
     def switch_manual_inspection_screen(self):
         selected_option = self.ui.ManualinspectionBox.currentText()
@@ -41,6 +43,14 @@ class MainDashboardController(QMainWindow):
         if selected_option == "Latex Glove":
             print("1")
             self.router.setCurrentIndex(1)
+
+    def switch_log_screen(self):
+        if self.ui.LogReportButton.isChecked() == False:
+            print("2")
+
+    def switch_simulation_screen(self):
+        if self.ui.SimulationButton.isChecked() == False:
+            print("3")
 
     def create_defect_count_chart(self):
         chart = QChart()
@@ -79,6 +89,3 @@ class MainDashboardController(QMainWindow):
         bar_series.attachAxis(y_axis)
 
         return chart
-
-    def closeBtn(self):
-        pass

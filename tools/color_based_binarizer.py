@@ -27,28 +27,28 @@ class ColorBasedBinarizer:
         return result
 
 # test code
-img = cv2.imread("./Images/Silicone/missing_finger_1.jpeg")
+# img = cv2.imread("./Images/Silicone/missing_finger_1.jpeg")
 
-# Define the pink color range in HSV
-lower_pink = np.array([120, 20, 145])
-upper_pink = np.array([180, 255, 255])
+# # Define the pink color range in HSV
+# lower_pink = np.array([120, 20, 145])
+# upper_pink = np.array([180, 255, 255])
 
-lower_brown = np.array([0, 20, 145])
-upper_brown = np.array([20, 255, 255])
+# lower_brown = np.array([0, 20, 145])
+# upper_brown = np.array([20, 255, 255])
 
-ranges = [
-    [lower_pink, upper_pink],
-    [lower_brown, upper_brown]
-]
+# ranges = [
+#     [lower_pink, upper_pink],
+#     [lower_brown, upper_brown]
+# ]
 
-# how this class is used
-result = ColorBasedBinarizer.apply(img, ranges)
+# # how this class is used
+# result = ColorBasedBinarizer.apply(img, ranges)
 
-# morphological operation - opening for denoising
-kernel = np.ones((5, 5), np.uint8) 
-result=cv2.dilate(result, kernel, iterations=1)
-result=cv2.erode(result, kernel, iterations=3)
+# # morphological operation - opening for denoising
+# kernel = np.ones((5, 5), np.uint8) 
+# result=cv2.dilate(result, kernel, iterations=1)
+# result=cv2.erode(result, kernel, iterations=3)
 
-cv2.imshow("orig", img)
-cv2.imshow("res", result)
-cv2.waitKey(0)
+# cv2.imshow("orig", img)
+# cv2.imshow("res", result)
+# cv2.waitKey(0)

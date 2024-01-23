@@ -6,6 +6,7 @@ import pandas as pd
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter
 from PyQt5.QtChart import QBarSet, QBarSeries, QChart, QBarCategoryAxis, QChartView, QValueAxis
+from enums import Pages
 
 class DefectDAO:
     def __init__(self,csv_path='Database\\data.csv'):
@@ -42,7 +43,7 @@ class MainDashboardController(QMainWindow):
 
         if selected_option == "Latex Glove":
             print("1")
-            self.router.setCurrentIndex(1)
+            self.router.setCurrentIndex(Pages.MANUAL_INSPECTION.value)
 
     def switch_log_screen(self):
         if self.ui.LogReportButton.isChecked() == False:

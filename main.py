@@ -7,6 +7,8 @@ from UI_Design.test import *
 from Controllers.manual_inspection_controller import ManualInspectionController
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 
+from enums import Pages
+
 
 # Add ur pages here and access by index.
 def add_pages(router):
@@ -33,6 +35,6 @@ if __name__ == "__main__":
     add_pages(router)
 
     router.setGeometry(100, 100, 996, 700)
-    router.setCurrentIndex(0)
+    router.setCurrentIndex(Pages.DASHBOARD.value)
     router.show()
     sys.exit(app.exec_())

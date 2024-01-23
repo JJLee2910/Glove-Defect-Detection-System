@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-class Detectors():
+class Detector():
     img = None
 
     def __init__(self, img) -> None:

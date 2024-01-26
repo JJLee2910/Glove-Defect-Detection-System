@@ -27,12 +27,6 @@ class DirtDetector:
         # morphological operation - opening for denoising
         result = self.morphEx(result)
 
-        # find contour
-
-        # filter contour by size
-
-        # if got big contours means got dirt
-
         cv2.imshow("orig", self.img)
         cv2.imshow("res", result)
         cv2.waitKey(0)

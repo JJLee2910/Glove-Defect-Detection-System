@@ -10,7 +10,7 @@ class DirtDetector(Detector):
 
     def detect(self):
         # binarize the images
-        result = ColorBasedBinarizer.apply(self.img, 0.5, 0.6, 0.4)
+        result = ColorBasedBinarizer.apply(self.img, 0.1, 0.2, 0.2)
 
         cv2.imshow("orig", self.img)
         cv2.imshow("res", result)

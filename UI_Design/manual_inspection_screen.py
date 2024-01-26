@@ -157,10 +157,10 @@ class Ui_MainWindow(object):
         self.PictureLabel.setScaledContents(True)
         self.PictureLabel.setObjectName("PictureLabel")
         self.AddImageBtn = QtWidgets.QPushButton(self.widget)
-        self.AddImageBtn.setGeometry(QtCore.QRect(320, 430, 151, 41))
+        self.AddImageBtn.setGeometry(QtCore.QRect(10, 430, 151, 41))
         self.AddImageBtn.setObjectName("AddImageBtn")
         self.StartDetectionBtn = QtWidgets.QPushButton(self.widget)
-        self.StartDetectionBtn.setGeometry(QtCore.QRect(500, 430, 151, 41))
+        self.StartDetectionBtn.setGeometry(QtCore.QRect(440, 430, 151, 41))
         self.StartDetectionBtn.setObjectName("StartDetectionBtn")
         self.verticalLayout_5.addWidget(self.widget)
         self.info_label = QtWidgets.QLabel(self.info_frame)
@@ -197,6 +197,7 @@ class Ui_MainWindow(object):
         self.AddImageBtn.setText(_translate("MainWindow", "Add Image"))
         self.StartDetectionBtn.setText(_translate("MainWindow", "Start Detection"))
         self.info_label.setText(_translate("MainWindow", "Asia Pacific University IPPR Assignment"))
+        
 from UI_Design import resources_rc
 
 

@@ -1,24 +1,40 @@
 import cv2
 import numpy as np
-from tools.FindLatex import findLatexContour, findDirtColor
+from tools.color_based_binarizer import ColorBasedBinarizer
 
 
 class DirtDetector:
     def __init__(self, img) -> None:
         self.img = img
 
+    def morphEx(self):
+        pass
+
     def detect(self):
-        # Find the mask of the latex
-        latexContour = findLatexContour(self.img)
+        # binarize the image
+        lower_pink = np.array([120, 20, 145])
+        upper_pink = np.array([180, 255, 255])
 
-        overlay = np.zeros((self.img.shape[0], self.img.shape[1],4),
-                           dtype="uint8")
-        
-        if latexContour is None:
-            return overlay
-        
-        # find the stain mask
-        dirt_contour = findDirtColor(self.img)
+        lower_brown = np.array([0, 20, 145])
+        upper_brown = np.array([20, 255, 255])
 
-        # find the min area of the rectangle
+        ranges = [
+            [lower_pink, upper_pink],
+            [lower_brown, upper_brown]
+        ]
+
+        result = ColorBasedBinarizer.apply(self.img, ranges)
+
+        # morphological operation - opening for denoising
+        result = self.morph_open(result)
+
+        # find contour
+
+        # filter contour by size
+
+        # if got big contours means got dirt
+
+        cv2.imshow("orig", self.img)
+        cv2.imshow("res", result)
+        cv2.waitKey(0)
         

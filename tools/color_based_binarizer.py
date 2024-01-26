@@ -21,7 +21,7 @@ class ColorBasedBinarizer:
         # Create a black image
         result = np.zeros_like(img_rgb)
 
-        # Set pixels within the pink color range to white in the result image
+        # Set pixels within the color range to white in the result image
         result[mask != 0] = [255, 255, 255]
 
         return result

@@ -5,3 +5,4 @@ class Pages(Enum):
     DASHBOARD = 0
     LOG = 1
     MANUAL_INSPECTION = 2
+    SIMULATION_INSPECTION = 3

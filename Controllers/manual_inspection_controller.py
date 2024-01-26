@@ -1,5 +1,5 @@
 import cv2
-from Detectors.silicone.dirt_detector import DirtDetector
+# from Detectors.silicone.dirt_detector import DirtDetector
 from Detectors.latex.latex_dirt_detector import DirtDetector
 from UI_Design.manual_inspection_screen import *
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QFileDialog

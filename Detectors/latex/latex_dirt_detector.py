@@ -15,12 +15,8 @@ class DirtDetector:
 
     def detect(self):
         # binarize the image
-        min_hsv = np.array([0.5, 0.6, 0.75])
-        max_hsv = np.array([0.6, 0.7, 0.8])
-
-        lower_blue = (min_hsv * 255).astype(np.uint8)
-        upper_blue = (max_hsv * 255).astype(np.uint8)
-
+        lower_blue = np.array([89, 20, 145])
+        upper_blue = np.array([107, 255, 255])
 
         ranges = [
             [lower_blue, upper_blue]

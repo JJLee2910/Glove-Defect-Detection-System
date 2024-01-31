@@ -305,7 +305,7 @@
                    <widget class="QTableWidget" name="logTable">
                     <property name="geometry">
                      <rect>
-                      <x>-30</x>
+                      <x>0</x>
                       <y>0</y>
                       <width>621</width>
                       <height>441</height>
@@ -313,17 +313,12 @@
                     </property>
                     <column>
                      <property name="text">
-                      <string>Name </string>
+                      <string>Glove Type</string>
                      </property>
                     </column>
                     <column>
                      <property name="text">
-                      <string>Type of glove</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>Type of defect</string>
+                      <string>Defect Type</string>
                      </property>
                     </column>
                     <column>
@@ -333,7 +328,7 @@
                     </column>
                     <column>
                      <property name="text">
-                      <string>Time</string>
+                      <string>Image Path</string>
                      </property>
                     </column>
                    </widget>

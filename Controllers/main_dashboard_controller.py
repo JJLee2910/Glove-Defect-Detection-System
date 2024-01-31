@@ -1,5 +1,4 @@
 from UI_Design.Main_Dashboard import *
-from UI_Design.test import *
 from Controllers.manual_inspection_controller import ManualInspectionController
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QGraphicsView, QGraphicsScene, QVBoxLayout
 import pandas as pd
@@ -9,7 +8,7 @@ from PyQt5.QtChart import QBarSet, QBarSeries, QChart, QBarCategoryAxis, QChartV
 from enums import Pages
 
 class DefectDAO:
-    def __init__(self,csv_path='Glove-Defect-Detection-System\Database\data.csv'):
+    def __init__(self,csv_path='Database\data.csv'):
         self.csv_path = csv_path
     
     def get_data(self):

@@ -1,6 +1,6 @@
-from Controllers.main_dashboard_controller import *
+from Controllers.main_dashboard_controller import DefectDAO
 from UI_Design.log import *
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QTableWidgetItem
 from enums import Pages
 
 class LogController(QMainWindow):
@@ -14,7 +14,9 @@ class LogController(QMainWindow):
         self.defectDao = DefectDAO()
         self.data = self.defectDao.get_data()
 
-        #
+        print("Data in LogController:")
+        print(self.data.head())
+
         self.ui.DashboardButton.clicked.connect(self.go_dashboard)
         self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
         self.ui.SimulationButton.clicked.connect(self.switch_simulation_screen)
@@ -35,4 +37,20 @@ class LogController(QMainWindow):
             print("3")
 
     def displayTableInfo(self):
-        pass
+        print("displayTableInfo called")
+        self.ui.logTable.clearContents()
+        
+        data = self.defectDao.get_data()
+        print(data)
+
+        self.ui.logTable.setRowCount(len(data))
+        self.ui.logTable.setColumnCount(len(data[0]))
+
+        for row_index, row_data in enumerate(data):
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                self.ui.logTable.setItem(row_index, col_index, item)
+
+        self.ui.logTable.resizeColumnsToContents()
+
+        self.ui.logTable.show()

@@ -33,3 +33,6 @@ class LogController(QMainWindow):
     def switch_simulation_screen(self):
         if self.ui.SimulationButton.isChecked() == False:
             print("3")
+
+    def displayTableInfo(self):
+        pass

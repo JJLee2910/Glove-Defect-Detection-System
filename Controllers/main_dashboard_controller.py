@@ -9,7 +9,7 @@ from PyQt5.QtChart import QBarSet, QBarSeries, QChart, QBarCategoryAxis, QChartV
 from enums import Pages
 
 class DefectDAO:
-    def __init__(self,csv_path='Database\\data.csv'):
+    def __init__(self,csv_path='Glove-Defect-Detection-System\Database\data.csv'):
         self.csv_path = csv_path
     
     def get_data(self):

@@ -1,7 +1,7 @@
 import cv2
 # from Detectors.silicone.dirt_detector import DirtDetector
 # from Detectors.latex.latex_dirt_detector import DirtDetector
-from Detectors.cloth.temp import DirtDetector
+from Detectors.cloth.temp import StainDetector
 from UI_Design.manual_inspection_screen import *
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QFileDialog
 from PyQt5.QtCore import QDir
@@ -35,5 +35,6 @@ class ManualInspectionController(QMainWindow):
 
     def start_detection(self):
         img = cv2.imread(self.image_filename)
-        DirtDetector(img).detect()
+        # DirtDetector(img).detect()
+        StainDetector(img).detect()
         

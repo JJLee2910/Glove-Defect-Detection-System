@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 from skimage.color import rgb2hsv
 
-img = cv2.imread("D:\OneDrive - Asia Pacific University\Degree Year 3\Image Processing, Computer Vision and Pattern Recognition\Assignment\Source Code\Glove-Defect-Detection-System\Images\Cloth\\test1.jpg")
+img = cv2.imread("C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Cloth\\test1.jpg")
 new_img = cv.resize(img, None, fx=0.5, fy=0.5)
 
 def apply_mask(lower_hue, upper_hue, saturation_threshold):
@@ -18,4 +18,4 @@ def apply_mask(lower_hue, upper_hue, saturation_threshold):
     cv2.imshow("masked image",masked_image)
     cv2.waitKey(0)
 
-apply_mask(0.5, 0.7, 0.1) # adjust accordingly based on ur 
+apply_mask(0.0, 0.2, 0.1) # adjust accordingly based on ur 

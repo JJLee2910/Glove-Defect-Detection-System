@@ -37,23 +37,23 @@ class LogController(QMainWindow):
             print("3")
             self.router.setCurrentIndex(Pages.SIMULATION_INSPECTION.value)
 
-    def displayTableInfo(self):
-        print("displayTableInfo called")
-        self.ui.logTable.clearContents()
+    # def displayTableInfo(self):
+    #     print("displayTableInfo called")
+    #     self.ui.logTable.clearContents()
 
-        data = self.defectDao.get_data()
-        print("Data from DefectDAO:")
-        print(data)
+    #     data = self.defectDao.get_data()
+    #     print("Data from DefectDAO:")
+    #     print(data)
 
-        self.ui.logTable.setRowCount(len(data))
-        self.ui.logTable.setColumnCount(len(data.columns))
+    #     self.ui.logTable.setRowCount(len(data))
+    #     self.ui.logTable.setColumnCount(len(data.columns))
 
-        for row_index, row_data in enumerate(data.values):
-            for col_index, cell_data in enumerate(row_data):
-                print(f"Setting data at ({row_index}, {col_index}): {cell_data}")
-                item = QTableWidgetItem(str(cell_data))
-                self.ui.logTable.setItem(row_index, col_index, item)
+    #     for row_index, row_data in enumerate(data.values):
+    #         for col_index, cell_data in enumerate(row_data):
+    #             print(f"Setting data at ({row_index}, {col_index}): {cell_data}")
+    #             item = QTableWidgetItem(str(cell_data))
+    #             self.ui.logTable.setItem(row_index, col_index, item)
 
-        self.ui.logTable.resizeColumnsToContents()
-        self.ui.logTable.show()
+    #     self.ui.logTable.resizeColumnsToContents()
+    #     self.ui.logTable.show()
 

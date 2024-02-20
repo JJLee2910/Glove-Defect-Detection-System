@@ -47,7 +47,7 @@ class LogController(QMainWindow):
         for row_index, row_data in enumerate(self.data.values):
             for col_index, cell_data in enumerate(row_data):
                 item = QTableWidgetItem(str(cell_data))
-                item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+                item.setFlags(item.flags() ^ Qt.ItemIsEditable) # set item uneditable in table
                 self.ui.logTable.setItem(row_index, col_index, item)
 
         self.ui.logTable.setHorizontalHeaderLabels(self.data.columns)

@@ -20,9 +20,17 @@ class ManualInspectionController(QMainWindow):
         self.ui.DashboardButton.clicked.connect(self.go_dashboard)
         self.ui.AddImageBtn.clicked.connect(self.add_image)
         self.ui.StartDetectionBtn.clicked.connect(self.start_detection)
+        self.ui.LogReportButton.clicked.connect(self.go_logReport)
+        self.ui.SimulationButton.clicked.connect(self.go_simulation)
 
     def go_dashboard(self):
         self.router.setCurrentIndex(Pages.DASHBOARD.value)
+
+    def go_logReport(self):
+        self.router.setCurrentIndex(Pages.LOG.value)
+
+    def go_simulation(self):
+        self.router.setCurrentIndex(Pages.SIMULATION_INSPECTION.value)
         
     def add_image(self, filename=None):
         if not filename:

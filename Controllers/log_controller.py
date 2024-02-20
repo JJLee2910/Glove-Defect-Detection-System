@@ -35,6 +35,7 @@ class LogController(QMainWindow):
     def switch_simulation_screen(self):
         if self.ui.SimulationButton.isChecked() == False:
             print("3")
+            self.router.setCurrentIndex(Pages.SIMULATION_INSPECTION.value)
 
     def displayTableInfo(self):
         print("displayTableInfo called")

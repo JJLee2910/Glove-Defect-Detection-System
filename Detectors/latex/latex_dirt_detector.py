@@ -10,7 +10,7 @@ class DirtDetectors(Detector):
 
     def detect(self):
         # binarize the images
-        result = ColorBasedBinarizer.apply(self.img, 0.1, 0.2, .5)
+        result = ColorBasedBinarizer.apply(self.img, 0.1, 0.2, 0.3)
 
         # Concatenate the original image and the result horizontally
         combined_img = np.hstack((self.img, result))

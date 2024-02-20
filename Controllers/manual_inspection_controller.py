@@ -44,6 +44,6 @@ class ManualInspectionController(QMainWindow):
     def start_detection(self):
         img = cv2.imread(self.image_filename)
         # DirtDetector(img).detect()
-        StainDetector(img).detect()
-        # DirtDetectors(img).detect()
+        # StainDetector(img).detect()
+        DirtDetectors(img).detect()
         

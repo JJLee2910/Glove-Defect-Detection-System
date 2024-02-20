@@ -1,6 +1,7 @@
 from Controllers.main_dashboard_controller import DefectDAO
 from UI_Design.log import *
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QTableWidgetItem
+from PyQt5.QtCore import Qt
 from enums import Pages
 
 class LogController(QMainWindow):
@@ -21,6 +22,8 @@ class LogController(QMainWindow):
         self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
         self.ui.SimulationButton.clicked.connect(self.switch_simulation_screen)
 
+        self.displayTableInfo()
+
     def go_dashboard(self):
         self.router.setCurrentIndex(Pages.DASHBOARD.value)
 
@@ -37,23 +40,14 @@ class LogController(QMainWindow):
             print("3")
             self.router.setCurrentIndex(Pages.SIMULATION_INSPECTION.value)
 
-    # def displayTableInfo(self):
-    #     print("displayTableInfo called")
-    #     self.ui.logTable.clearContents()
+    def displayTableInfo(self):
+        self.ui.logTable.setRowCount(self.data.shape[0])
+        self.ui.logTable.setColumnCount(self.data.shape[1])
 
-    #     data = self.defectDao.get_data()
-    #     print("Data from DefectDAO:")
-    #     print(data)
+        for row_index, row_data in enumerate(self.data.values):
+            for col_index, cell_data in enumerate(row_data):
+                item = QTableWidgetItem(str(cell_data))
+                item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+                self.ui.logTable.setItem(row_index, col_index, item)
 
-    #     self.ui.logTable.setRowCount(len(data))
-    #     self.ui.logTable.setColumnCount(len(data.columns))
-
-    #     for row_index, row_data in enumerate(data.values):
-    #         for col_index, cell_data in enumerate(row_data):
-    #             print(f"Setting data at ({row_index}, {col_index}): {cell_data}")
-    #             item = QTableWidgetItem(str(cell_data))
-    #             self.ui.logTable.setItem(row_index, col_index, item)
-
-    #     self.ui.logTable.resizeColumnsToContents()
-    #     self.ui.logTable.show()
-
+        self.ui.logTable.setHorizontalHeaderLabels(self.data.columns)

@@ -238,7 +238,7 @@ class Ui_MainWindow(object):
         self.totalGloveLabel.setText(_translate("MainWindow", "Total glove inspected:"))
         self.stopButton.setText(_translate("MainWindow", "Stop"))
         self.info_label.setText(_translate("MainWindow", "Asia Pacific University IPPR Assignment"))
-import resources_rc
+from UI_Design import resources_rc
 
 
 if __name__ == "__main__":

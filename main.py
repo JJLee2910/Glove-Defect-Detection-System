@@ -1,6 +1,6 @@
 import os
 import sys
-from Controllers import main_dashboard_controller, manual_inspection_controller, log_controller
+from Controllers import main_dashboard_controller, manual_inspection_controller, log_controller, simulation_controller
 from UI_Design.Main_Dashboard import *
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 
@@ -18,8 +18,8 @@ def add_pages(router):
     manual_inspection_page = manual_inspection_controller.ManualInspectionController(router)
     router.addWidget(manual_inspection_page)
 
-    # simulation_page = False # Replace False with simulation page connection
-    # router.addWidget(simulation_page)
+    simulation_page = simulation_controller.SimulationController(router) # Replace False with simulation page connection
+    router.addWidget(simulation_page)
 
 
 if __name__ == "__main__":

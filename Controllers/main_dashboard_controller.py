@@ -52,6 +52,7 @@ class MainDashboardController(QMainWindow):
     def switch_simulation_screen(self):
         if self.ui.SimulationButton.isChecked() == False:
             print("3")
+            self.router.setCurrentIndex(Pages.SIMULATION_INSPECTION.value)
 
     def create_defect_count_chart(self):
         chart = QChart()

@@ -11,7 +11,7 @@ kernel = np.ones((3,3), np.uint8)
 
 kernel2 = np.ones((9,9), np.uint8)
 
-img = cv2.imread("D:\OneDrive - Asia Pacific University\Degree Year 3\Image Processing, Computer Vision and Pattern Recognition\Assignment\Source Code\Glove-Defect-Detection-System\Images\Cloth\\missing_finger_4.jpg")
+img = cv2.imread("C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\missing_finger_2.jpg")
 img = cv.resize(img, None, fx=0.3, fy=0.3)
 # Reduce noise
 img = cv2.GaussianBlur(img, (5,5), 0)

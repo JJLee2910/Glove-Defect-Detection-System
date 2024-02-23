@@ -1,7 +1,7 @@
 import cv2
 from Detectors.silicone.dirt_detector import DirtDetector
 from Detectors.latex.latex_dirt_detector import DirtDetectors
-from Detectors.cloth import *
+from Detectors.cloth.nitrile_missing_finger import MissingFingerDetector
 from UI_Design.manual_inspection_screen import *
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QFileDialog
 from PyQt5.QtCore import QDir
@@ -46,4 +46,5 @@ class ManualInspectionController(QMainWindow):
         # DirtDetector(img).detect()
         # StainDetector(img).detect()
         DirtDetectors(img).detect()
+        # MissingFingerDetector(img).detect()
         

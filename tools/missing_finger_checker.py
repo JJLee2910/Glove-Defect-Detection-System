@@ -1,23 +1,12 @@
-import cv2 as cv
 import numpy as np
 import cv2
 from skimage.color import rgb2hsv
+from color_based_binarizer import ColorBasedBinarizer
 
-img = cv2.imread("D:\OneDrive - Asia Pacific University\Degree Year 3\Image Processing, Computer Vision and Pattern Recognition\Assignment\Source Code\Glove-Defect-Detection-System\Images\Cloth\\missing_finger_9.jpg")
-img = cv.resize(img, None, fx=0.3, fy=0.3)
+img = cv2.imread("C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\missing_finger_3.jpg")
+img = cv2.resize(img, None, fx=0.2, fy=0.2)
 
-def apply_mask(lower_hue, upper_hue, saturation_threshold):
-    hsv_image = rgb2hsv(img)
-
-    lower_mask = hsv_image[..., 0] > lower_hue
-    upper_mask = hsv_image[..., 0] < upper_hue
-    saturation_mask = hsv_image[..., 1] > saturation_threshold
-
-    mask = np.logical_and.reduce((lower_mask, upper_mask, saturation_mask))
-    masked_image = img * np.expand_dims(mask, axis=2)
-    return masked_image
-
-masked_image = apply_mask(0.0, 0.2, 0.05) 
+masked_image = ColorBasedBinarizer.apply(img,0.0, 0.2, 0.05) 
 
 # Convert to grayscale
 gray = cv2.cvtColor(masked_image, cv2.COLOR_BGR2GRAY)

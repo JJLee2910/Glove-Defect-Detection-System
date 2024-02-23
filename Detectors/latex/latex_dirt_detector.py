@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from Detectors.base import Detector
-from tools.color_based_binarizer import ColorBasedBinarizer
+from tools.color_based_binarizer import ColorBasedBinarizer, missingFinger
 
 class DirtDetectors(Detector):
     def __init__(self, img) -> None:

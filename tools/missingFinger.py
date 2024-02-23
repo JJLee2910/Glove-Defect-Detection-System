@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 from skimage.color import rgb2hsv
-from color_based_binarizer import ColorBasedBinarizer
+from tools.color_based_binarizer import ColorBasedBinarizer
 
 class missingFinger:
     @staticmethod
@@ -14,7 +14,6 @@ class missingFinger:
 
         # reduce noise
         blur = cv.medianBlur(th, 15)
-        cv.imshow('th', blur)
 
         # Find Contours
         contours, hierarchy = cv.findContours(blur, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
@@ -28,7 +27,6 @@ class missingFinger:
 
         hull = cv.convexHull(contours, returnPoints=False)
         defects = cv.convexityDefects(contours, hull)
-        cv.imshow('hull',ori_img)
 
         if defects is not None:
             cnt = 0

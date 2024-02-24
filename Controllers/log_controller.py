@@ -51,3 +51,5 @@ class LogController(QMainWindow):
                 self.ui.logTable.setItem(row_index, col_index, item)
 
         self.ui.logTable.setHorizontalHeaderLabels(self.data.columns)
+        self.ui.logTable.resizeColumnsToContents()
+        self.ui.logTable.horizontalHeader().setStretchLastSection(True)

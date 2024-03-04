@@ -1,14 +1,12 @@
 import cv2
 from Controllers.my_main_window import MyMainWindow
-from Detectors.silicone.dirt_detector import DirtDetector
-from Detectors.latex.latex_dirt_detector import DirtDetectors
-from Detectors.cloth.nitrile_missing_finger import MissingFingerDetector
 from UI_Design.manual_inspection_screen import *
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QFileDialog
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QDir
 from PyQt5.QtGui import QPixmap
 
-from enums import Pages
+from app_data import AppData
+from settings import type_to_detectors
 
 class ManualInspectionController(MyMainWindow):
     def __init__(self, *args, **kwargs):
@@ -29,9 +27,15 @@ class ManualInspectionController(MyMainWindow):
         self.ui.PictureLabel.setPixmap(QPixmap(filename))
 
     def start_detection(self):
-        img = cv2.imread(self.image_filename)
-        # DirtDetector(img).detect()
-        # StainDetector(img).detect()
-        DirtDetectors(img).detect()
-        # MissingFingerDetector(img).detect()
+        glove_type = AppData().manual_inspection_glove_type
+        detection_type = self.ui.detectionComboBox.currentText()
         
+        if not glove_type or not detection_type or not self.image_filename:
+            print("choose image/glove/detection la")
+            return
+        
+        img = cv2.imread(self.image_filename)
+
+        detector_cls = type_to_detectors[glove_type][detection_type]
+
+        detector_cls(img).detect()

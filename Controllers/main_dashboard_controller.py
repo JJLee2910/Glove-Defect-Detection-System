@@ -1,3 +1,4 @@
+from Controllers.my_main_window import MyMainWindow
 from UI_Design.Main_Dashboard import *
 from Controllers.manual_inspection_controller import ManualInspectionController
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QStackedWidget, QGraphicsView, QGraphicsScene, QVBoxLayout
@@ -14,12 +15,10 @@ class DefectDAO:
     def get_data(self):
         return pd.read_csv(self.csv_path)
 
-class MainDashboardController(QMainWindow):
-    def __init__(self, router):
-        super(MainDashboardController, self).__init__()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-        self.router = router
+class MainDashboardController(MyMainWindow):
+    def __init__(self, *args, **kwargs):
+        ui = Ui_MainWindow()
+        super(MainDashboardController, self).__init__(ui, *args, **kwargs)
 
         self.defectDao = DefectDAO()
         self.data = self.defectDao.get_data()
@@ -30,29 +29,6 @@ class MainDashboardController(QMainWindow):
         chart_view.setRenderHint(QPainter.Antialiasing)
 
         self.ui.gridLayout.addWidget(chart_view)
-
-        # add your event listeners here
-        self.ui.ManualinspectionBox.currentIndexChanged.connect(self.switch_manual_inspection_screen)
-        self.ui.SimulationButton.clicked.connect(self.switch_simulation_screen)
-        self.ui.LogReportButton.clicked.connect(self.switch_log_screen)
-
-    def switch_manual_inspection_screen(self):
-        selected_option = self.ui.ManualinspectionBox.currentText()
-        self.ui.ManualinspectionBox.setCurrentIndex(0)
-
-        if selected_option == "Latex Glove":
-            print("1")
-            self.router.setCurrentIndex(Pages.MANUAL_INSPECTION.value)
-
-    def switch_log_screen(self):
-        if self.ui.LogReportButton.isChecked() == False:
-            print("2")
-            self.router.setCurrentIndex(Pages.LOG.value)
-
-    def switch_simulation_screen(self):
-        if self.ui.SimulationButton.isChecked() == False:
-            print("3")
-            self.router.setCurrentIndex(Pages.SIMULATION_INSPECTION.value)
 
     def create_defect_count_chart(self):
         chart = QChart()

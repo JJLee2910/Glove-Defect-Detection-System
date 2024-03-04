@@ -3,6 +3,7 @@ import numpy as np
 from Detectors.base import Detector
 from tools.color_based_binarizer import ColorBasedBinarizer
 
+
 class DirtDetector(Detector):
     def __init__(self, img) -> None:
         self.img = img
@@ -11,8 +12,7 @@ class DirtDetector(Detector):
         # binarize the images
         result = ColorBasedBinarizer.apply(self.img, 0.6, 1.0, 0.15)
 
-        # Concatenate the original image and the result horizontally
-        combined_img = np.hstack((self.img, result))
+        result = StainFinder()
 
         cv2.imshow("Combined", combined_img)
         cv2.waitKey(0)

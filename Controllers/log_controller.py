@@ -23,8 +23,8 @@ class LogController(QMainWindow):
         self.defectDao = DefectDAO()
         self.data = self.defectDao.get_data()
 
-        print("Data in LogController:")
-        print(self.data.head())
+        # print("Data in LogController:")
+        # print(self.data.head())
 
         self.ui.DashboardButton.clicked.connect(self.go_dashboard)
         self.ui.ManualinspectionBox.currentIndexChanged.connect(
@@ -73,5 +73,3 @@ class LogController(QMainWindow):
                 self.ui.logTable.setItem(row_index, col_index, item)
 
         self.ui.logTable.setHorizontalHeaderLabels(self.data.columns)
-        # self.ui.logTable.resizeColumnsToContents()
-        # self.ui.logTable.horizontalHeader().setStretchLastSection(True)

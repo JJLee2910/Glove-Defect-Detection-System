@@ -11,6 +11,6 @@ class DirtDetector(Detector):
 
     def detect(self):
         # binarize the images
-        result = ColorBasedBinarizer.apply(self.img, 0.6, 1.0, 0.15)
+        result = ColorBasedBinarizer.apply(self.img, 0.65, 1.0, 0.15)
 
         result = StainFinder().apply(result)

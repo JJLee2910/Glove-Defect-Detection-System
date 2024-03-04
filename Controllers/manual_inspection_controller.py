@@ -7,11 +7,13 @@ from PyQt5.QtGui import QPixmap
 
 from app_data import AppData
 from settings import type_to_detectors
+from PyQt5.QtWidgets import QMessageBox
 
 class ManualInspectionController(MyMainWindow):
     def __init__(self, *args, **kwargs):
         ui = Ui_MainWindow()
         super(ManualInspectionController, self).__init__(ui, *args, **kwargs)
+        self.image_filename = ""
 
         # add your event listeners here
         self.ui.AddImageBtn.clicked.connect(self.add_image)
@@ -30,8 +32,19 @@ class ManualInspectionController(MyMainWindow):
         glove_type = AppData().manual_inspection_glove_type
         detection_type = self.ui.detectionComboBox.currentText()
         
-        if not glove_type or not detection_type or not self.image_filename:
-            print("choose image/glove/detection la")
+        message_box = None
+        if not glove_type:
+            print("choose glove la")
+            message_box = QMessageBox(QMessageBox.Icon.Critical, "Warning", "Please select a glove type", QMessageBox.Ok, self)
+        elif not detection_type:
+            print("choose detection la")
+            message_box = QMessageBox(QMessageBox.Icon.Critical, "Warning", "Please select a detection type", QMessageBox.Ok, self)
+        elif not self.image_filename:
+            print("choose image la")
+            message_box = QMessageBox(QMessageBox.Icon.Critical, "Warning", "Please select a image", QMessageBox.Ok, self)
+        
+        if message_box:
+            message_box.exec()
             return
         
         img = cv2.imread(self.image_filename)

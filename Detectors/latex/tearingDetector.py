@@ -12,6 +12,7 @@ class LatexTearDetector(Detector):
 
         overlay = np.zeros_like(self.img, dtype=np.uint8)
 
+
         if latex_contour is None:
             return overlay
 
@@ -47,6 +48,12 @@ class LatexTearDetector(Detector):
             # cv.drawContours(overlay, [contour], -1, (0, 255, 0, 255), 2)
             # cv.imshow('tear_overlay', overlay)
 
+            # print(f"Contour {i + 1}: {contour}")
+
+            # print(f"Bounding Box {i + 1}: {minRect[i]}")
+
+            # print(f"Ellipse {i + 1}: {minEllipse[i]}")
+
             is_within_mask = cv.pointPolygonTest(
                 latex_contour,
                 (x, y),
@@ -59,8 +66,6 @@ class LatexTearDetector(Detector):
 
                 cv.ellipse(overlay, minEllipse[i], (0, 255, 0, 255), 2)
 
-                # doing this to center the text
-                # message = f'Tear ({area:.2f}), {aspect_ratio:.2f},{is_within_mask:.2f})'
                 message = 'Tear'
                 text_size, _ = cv.getTextSize(
                     message,
@@ -83,7 +88,7 @@ class LatexTearDetector(Detector):
                 )
 
         result = cv.addWeighted(self.img, 1, overlay, 0.5, 0)
-        new_result = cv.resize(result, None, fx=0.2, fy=0.2)
+        new_result = cv.resize(result, (500,500))
         cv.imshow('Result', new_result)
         cv.waitKey(0)
         cv.destroyAllWindows()

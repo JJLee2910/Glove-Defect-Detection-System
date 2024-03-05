@@ -5,10 +5,8 @@ import numpy as np
 def find_skin_contours(img):
     img_lab = cv.cvtColor(img, cv.COLOR_BGR2LAB)
 
-    # skin_lower = np.array([120, 130, 130])
-    # skin_higher = np.array([255, 255, 255])
-    skin_lower = np.array([0, 120, 130])
-    skin_higher = np.array([255, 170, 180])
+    skin_lower = np.array([88, 113, 135])
+    skin_higher = np.array([255, 255, 355])
     skin_extracted = cv.inRange(img_lab, skin_lower, skin_higher)
 
     # floodfill from point (0, 0)
@@ -17,9 +15,9 @@ def find_skin_contours(img):
     cv.floodFill(skin_extracted, mask, (0, 0), 255)
     # invert floodfilled image
     skin_extracted = cv.bitwise_not(skin_extracted)
-    skin_extracted = cv.resize(skin_extracted, None, fx=0.2, fy=.2)
+    # skin_extracted = cv.resize(skin_extracted, None, fx=0.2, fy=.2)
 
-    cv.imshow("skin_extracted", skin_extracted)
+    # cv.imshow("skin_extracted", skin_extracted)
 
     a_erode = cv.erode(skin_extracted, None, iterations=2)
     # cv.imshow("a_erode", a_erode)
@@ -41,12 +39,16 @@ def find_skin_contours(img):
         cv.CHAIN_APPROX_SIMPLE
     )
 
+    # cv.drawContours(img, a_contours, -1, (0, 255, 0), 3)
+    # img = cv.resize(skin_extracted, None, fx=0.2, fy=.2)
+    # cv.imshow("img", img)
+
     return a_contours
 
 
 def find_latex_contour(img):
-    latex_lower = np.array([90, 20, 145])
-    latex_higher = np.array([120, 255, 255])
+    latex_lower = np.array([73, 89, 54])
+    latex_higher = np.array([179, 255, 107])
     img_hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
     latex_extracted = cv.inRange(img_hsv, latex_lower, latex_higher)
     latex_extracted = cv.bitwise_not(latex_extracted, latex_extracted)

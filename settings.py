@@ -1,10 +1,11 @@
 from Detectors.silicone import dirt_detector, missing_finger_detector
-from Detectors.latex import latex_dirt_detector, missingFinger
+from Detectors.latex import latex_dirt_detector, missingFinger, tearingDetector
 
 type_to_detectors = {
     "Latex Glove": {
         "Stain" : latex_dirt_detector.DirtDetector,
-        "Missing Fingier" : missingFinger.MissingFingerDetector,
+        "Missing Finger" : missingFinger.MissingFingerDetector,
+        "Tearing" : tearingDetector.LatexTearDetector,
     },
     "Silicone Glove": {
         "Stain": dirt_detector.DirtDetector,

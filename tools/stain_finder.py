@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 class StainFinder:
     def apply(self, binarized_image):
         image = cv2.cvtColor(binarized_image, cv2.COLOR_BGR2GRAY)

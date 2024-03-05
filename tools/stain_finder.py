@@ -21,7 +21,4 @@ class StainFinder:
             print("No stain found")
             cv2.putText(binarized_image, 'Stain not detected', (0, 50), cv2.FONT_HERSHEY_SIMPLEX,1, (0, 255, 0) , 2, cv2.LINE_AA)
 
-        # Display the result
-        cv2.imshow("Result", binarized_image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        return binarized_image

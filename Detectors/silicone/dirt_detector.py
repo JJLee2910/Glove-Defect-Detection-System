@@ -16,8 +16,6 @@ class DirtDetector(Detector):
 
         result = StainFinder().apply(result)
 
-        result = Resizer.apply(result)
-
         cv2.imshow("Result", result)
         cv2.waitKey(0)
         cv2.destroyAllWindows()

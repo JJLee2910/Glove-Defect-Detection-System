@@ -1,9 +1,12 @@
 import cv2
 import numpy as np
 
+from tools.resizer import Resizer
+
+TARGET_HEIGHT = 500
 
 class StainFinder:
-    def apply(self, binarized_image):
+    def apply(self, binarized_image, target_height=TARGET_HEIGHT):
         image = cv2.cvtColor(binarized_image, cv2.COLOR_BGR2GRAY)
         blur = cv2.medianBlur(image,15)
 
@@ -13,6 +16,8 @@ class StainFinder:
         cv2.drawContours(binarized_image, contours, -1, (255, 0, 0), 3)
         
         print(len(contours))
+
+        binarized_image = Resizer.apply(binarized_image, target_height)
 
         if len(contours) > 1:
             print("Stain found")

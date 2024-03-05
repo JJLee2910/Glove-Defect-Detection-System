@@ -4,7 +4,7 @@ def on_change(val):
     pass
 
 
-img = cv2.imread('C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\tear_2.jpg')
+img = cv2.imread('C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\tear.jpg')
 img = cv2.resize(img, (500, 500))
 
 ilowH = 0
@@ -35,7 +35,7 @@ while(1):
     ihighV = cv2.getTrackbarPos('highV', windowName)
 
     img_copy = img.copy()
-    img_copy = cv2.cvtColor(img_copy, cv2.COLOR_BGR2LAB)
+    img_copy = cv2.cvtColor(img_copy, cv2.COLOR_BGR2HSV)
     upper = np.array([ihighH, ihighS, ihighV])
     lower = np.array([ilowH, ilowS, ilowV])
     img_copy = cv2.inRange(img_copy, lower, upper)

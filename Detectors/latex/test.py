@@ -20,11 +20,11 @@ mask = cv2.inRange(hsv_frame, lower, upper)
 # cv2.imshow("og mask", mask)
 
 # apply median filtering
-blurred_frame = cv2.medianBlur(mask, 5)
+blurred_frame = cv2.medianBlur(mask, 9)
 cv2.imshow('bf', blurred_frame)
 
 # Define the structuring element (kernel) for erosion
-kernel = np.ones((3, 3), np.uint8)  # 3x3 square kernel
+kernel = np.ones((5, 5), np.uint8)
 
 # Perform erosion
 eroded_frame = cv2.erode(blurred_frame, kernel)
@@ -38,9 +38,9 @@ cv2.drawContours(eroded_frame, contours, -1, (0, 255, 0), 2)
 # print('contours', contours)
 
 # Draw convex hulls on the gloves
-for contour in contours:
-    hull = cv2.convexHull(contour)
-    cv2.drawContours(frame, [hull], -1, (255, 0, 0), 2)
+# for contour in contours:
+#     hull = cv2.convexHull(contour)
+#     cv2.drawContours(frame, [hull], -1, (255, 0, 0), 2)
 
 # Detect the defect within the glove
 internal_cnt = [contours[i] for i in range(len(contours)) if hierarchy[0][i][3] >= 0]
@@ -74,7 +74,7 @@ if len(contours) > 0:
                 print(hd, '\n')
 
                 # Label the defect
-                if area > 490:
+                if area > 500:
                     # Defect Type: Tearing
                     frame = cv2.putText(frame, 'Tearing', (xd, yd - 5), cv2.FONT_HERSHEY_SIMPLEX,
                                         0.5, (0, 0, 255), 1, cv2.LINE_AA)

@@ -18,15 +18,24 @@ lower = np.array([85, 111, 122])
 upper = np.array([103, 255, 255])
 mask = cv2.inRange(hsv_frame, lower, upper)
 # cv2.imshow("og mask", mask)
-print(mask)
 
-# grey = cv2.cvtColor(hs, cv2.COLOR_BGR2GRAY)
-# blurred_ = cv2.GaussianBlur(grey, (11,11), 0)
+# apply median filtering
+blurred_frame = cv2.medianBlur(mask, 5)
+cv2.imshow('bf', blurred_frame)
+
+# Define the structuring element (kernel) for erosion
+kernel = np.ones((3, 3), np.uint8)  # 3x3 square kernel
+
+# Perform erosion
+eroded_frame = cv2.erode(blurred_frame, kernel)
+cv2.imshow('ef', eroded_frame)
 
 # Find Contours
 # findContours alters the image to show only the glove (blue color)
-contours, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-cv2.drawContours(hsv_frame, contours, -1, (0, 255, 0), 2)
+contours, hierarchy = cv2.findContours(eroded_frame.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+cv2.drawContours(eroded_frame, contours, -1, (0, 255, 0), 2)
+# print('hierarchy',hierarchy, '\n')
+# print('contours', contours)
 
 # Draw convex hulls on the gloves
 for contour in contours:
@@ -40,28 +49,32 @@ if len(contours) > 0:
     blue_area = max(contours, key=cv2.contourArea)
     (xg, yg, wg, hg) = cv2.boundingRect(blue_area)
 
-    # # Draw rectangle for glove
-    # cv2.rectangle(frame, (xg, yg), (xg + wg, yg + hg), (255, 0, 0), 1)
+    # Draw rectangle for glove
+    cv2.rectangle(frame, (xg, yg), (xg + wg, yg + hg), (255, 0, 0), 1)
 
-    # # Label the glove
-    # frame = cv2.putText(frame, 'Glove', (xg, yg - 5), cv2.FONT_HERSHEY_SIMPLEX,
-    #                     0.5, (255, 0, 0), 1, cv2.LINE_AA)
+    # Label the glove
+    frame = cv2.putText(frame, 'Glove', (xg, yg - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5, (255, 0, 0), 1, cv2.LINE_AA)
     
     # Find defect
     if len(internal_cnt) > 0:
         for i in internal_cnt:
+            # print(i)
 
             # Check defect size
             area = cv2.contourArea(i)
-            print(area)
-            if area > 17:
-                (xd, yd, wd, hd) = cv2.boundingRect(i)
-
+            print('area: ',area, '\n')
+            if area > 70:
+                xd, yd, wd, hd = cv2.boundingRect(i)
                 # Draw rectangle for defect
                 cv2.rectangle(frame, (xd, yd), (xd + wd, yd + hd), (0, 0, 255), 1)
+                print(xd)
+                print(yd)
+                print(wd)
+                print(hd, '\n')
 
                 # Label the defect
-                if area > 20:
+                if area > 490:
                     # Defect Type: Tearing
                     frame = cv2.putText(frame, 'Tearing', (xd, yd - 5), cv2.FONT_HERSHEY_SIMPLEX,
                                         0.5, (0, 0, 255), 1, cv2.LINE_AA)

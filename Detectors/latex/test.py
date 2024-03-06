@@ -14,9 +14,7 @@ frame = cv2.resize(frame, fixed_size, fx=0, fy=0, interpolation=cv2.INTER_CUBIC)
 hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
 # Mask for detecting glove
-# lower = np.array([0, 0, 0])
-# upper = np.array([179, 255, 104])
-lower = np.array([85, 111, 122])
+lower = np.array([0, 31, 140])
 upper = np.array([103, 255, 255])
 mask = cv2.inRange(hsv_frame, lower, upper)
 # cv2.imshow("og mask", mask)
@@ -30,31 +28,40 @@ cv2.drawContours(frame, contours, -1, (0, 255, 0), 2)
 
 # Detect the defect within the glove
 internal_cnt = [contours[i] for i in range(len(contours)) if hierarchy[0][i][3] >= 0]
+# print(internal_cnt)
+if len(contours) > 0:
+    blue_area = max(contours, key=cv2.contourArea)
+    (xg, yg, wg, hg) = cv2.boundingRect(blue_area)
 
-# Find defect
-if len(internal_cnt) > 0:
-    for i in internal_cnt:
+    # Draw rectangle for glove
+    cv2.rectangle(frame, (xg, yg), (xg + wg, yg + hg), (255, 0, 0), 1)
 
-        # Check defect size
-        area = cv2.contourArea(i)
-        print(area)
-        if area > 60:
-            (xd, yd, wd, hd) = cv2.boundingRect(i)
+    # Label the glove
+    frame = cv2.putText(frame, 'Glove', (xg, yg - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5, (255, 0, 0), 1, cv2.LINE_AA)
+    
+    # Find defect
+    if len(internal_cnt) > 0:
+        for i in internal_cnt:
 
-            # Draw rectangle for defect
-            cv2.rectangle(frame, (xd, yd), (xd + wd, yd + hd), (0, 0, 255), 1)
+            # Check defect size
+            area = cv2.contourArea(i)
+            print(area)
+            if area > 60:
+                (xd, yd, wd, hd) = cv2.boundingRect(i)
 
-            # Label the defect
-            if area == 418:
-                # Defect Type: Tearing
-                frame = cv2.putText(frame, 'Tearing', (xd, yd - 5), cv2.FONT_HERSHEY_SIMPLEX,
-                                    0.5, (0, 0, 255), 1, cv2.LINE_AA)
+                # Draw rectangle for defect
+                cv2.rectangle(frame, (xd, yd), (xd + wd, yd + hd), (0, 0, 255), 1)
 
-        # Display the glove mask video
-        cv2.imshow('Mask', mask)
-        # Display the output video
-        cv2.imshow('Output', frame)
-        cv2.imshow('Contours', frame)
+                # Label the defect
+                if area > 418:
+                    # Defect Type: Tearing
+                    frame = cv2.putText(frame, 'Tearing', (xd, yd - 5), cv2.FONT_HERSHEY_SIMPLEX,
+                                        0.5, (0, 0, 255), 1, cv2.LINE_AA)
+
+            cv2.imshow('Mask', mask)
+            cv2.imshow('Output', frame)
+            # cv2.imshow('Contours', frame)
 
 cv2.waitKey(0)
 # Close all the current windows

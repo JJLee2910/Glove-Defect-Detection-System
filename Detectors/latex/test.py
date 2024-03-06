@@ -14,17 +14,24 @@ frame = cv2.resize(frame, fixed_size, fx=0, fy=0, interpolation=cv2.INTER_CUBIC)
 hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
 # Mask for detecting glove
-lower = np.array([0, 31, 140])
+lower = np.array([85, 111, 122])
 upper = np.array([103, 255, 255])
 mask = cv2.inRange(hsv_frame, lower, upper)
 # cv2.imshow("og mask", mask)
 print(mask)
 
+# grey = cv2.cvtColor(hs, cv2.COLOR_BGR2GRAY)
+# blurred_ = cv2.GaussianBlur(grey, (11,11), 0)
 
 # Find Contours
 # findContours alters the image to show only the glove (blue color)
 contours, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-cv2.drawContours(frame, contours, -1, (0, 255, 0), 2)
+cv2.drawContours(hsv_frame, contours, -1, (0, 255, 0), 2)
+
+# Draw convex hulls on the gloves
+for contour in contours:
+    hull = cv2.convexHull(contour)
+    cv2.drawContours(frame, [hull], -1, (255, 0, 0), 2)
 
 # Detect the defect within the glove
 internal_cnt = [contours[i] for i in range(len(contours)) if hierarchy[0][i][3] >= 0]
@@ -47,21 +54,20 @@ if len(contours) > 0:
             # Check defect size
             area = cv2.contourArea(i)
             print(area)
-            if area > 60:
+            if area > 17:
                 (xd, yd, wd, hd) = cv2.boundingRect(i)
 
                 # Draw rectangle for defect
                 cv2.rectangle(frame, (xd, yd), (xd + wd, yd + hd), (0, 0, 255), 1)
 
                 # Label the defect
-                if area > 418:
+                if area > 20:
                     # Defect Type: Tearing
                     frame = cv2.putText(frame, 'Tearing', (xd, yd - 5), cv2.FONT_HERSHEY_SIMPLEX,
                                         0.5, (0, 0, 255), 1, cv2.LINE_AA)
 
-            cv2.imshow('Mask', mask)
-            cv2.imshow('Output', frame)
-            # cv2.imshow('Contours', frame)
+cv2.imshow('Mask', mask)
+cv2.imshow('Output', frame)
 
 cv2.waitKey(0)
 # Close all the current windows

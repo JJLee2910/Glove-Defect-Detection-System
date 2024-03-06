@@ -33,12 +33,12 @@ if len(contours) > 0:
     blue_area = max(contours, key=cv2.contourArea)
     (xg, yg, wg, hg) = cv2.boundingRect(blue_area)
 
-    # Draw rectangle for glove
-    cv2.rectangle(frame, (xg, yg), (xg + wg, yg + hg), (255, 0, 0), 1)
+    # # Draw rectangle for glove
+    # cv2.rectangle(frame, (xg, yg), (xg + wg, yg + hg), (255, 0, 0), 1)
 
-    # Label the glove
-    frame = cv2.putText(frame, 'Glove', (xg, yg - 5), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.5, (255, 0, 0), 1, cv2.LINE_AA)
+    # # Label the glove
+    # frame = cv2.putText(frame, 'Glove', (xg, yg - 5), cv2.FONT_HERSHEY_SIMPLEX,
+    #                     0.5, (255, 0, 0), 1, cv2.LINE_AA)
     
     # Find defect
     if len(internal_cnt) > 0:

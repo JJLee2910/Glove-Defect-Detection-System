@@ -1,94 +1,63 @@
 import cv2 as cv
 import numpy as np
-
 from Detectors.base import Detector
-from tools.contourFinder import find_latex_contour, find_skin_contours
 
+class TearingGloves(Detector):
+    def __init__(self, img) -> None:
+        self.img = img
+        self.fixed_size = (500,500)
+        self.frame = cv.resize(img, self.fixed_size, fx=0, fy=0, interpolation=cv.INTER_CUBIC)
 
-class LatexTearDetector(Detector):
     def detect(self):
-        # Find latex mask
-        latex_contour = find_latex_contour(self.img)
+        hsv_frame = cv.cvtColor(self.frame, cv.COLOR_BGR2HSV)
+        # Mask for detecting glove
+        lower = np.array([85, 111, 122])
+        upper = np.array([103, 255, 255])
+        mask = cv.inRange(hsv_frame, lower, upper)
 
-        overlay = np.zeros_like(self.img, dtype=np.uint8)
+        # apply median filtering
+        blurred_frame = cv.medianBlur(mask, 9)
 
+        # Define the structuring element (kernel) for erosion
+        kernel = np.ones((3, 3), np.uint8)
 
-        if latex_contour is None:
-            return overlay
+        # Perform erosion
+        eroded_frame = cv.erode(blurred_frame, kernel)
 
-        # Find skin mask
-        skin_contours = find_skin_contours(self.img)
+        # Find Contours
+        contours, hierarchy = cv.findContours(mask.copy(), cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE)
+        cv.drawContours(eroded_frame, contours, -1, (0, 255, 0), 2)
 
-        # find min area rect
-        minRect = [None]*len(skin_contours)
-        minEllipse = [None]*len(skin_contours)
-        for i, contour in enumerate(skin_contours):
-            minRect[i] = cv.minAreaRect(contour)
-            if contour.shape[0] > 5:
-                minEllipse[i] = cv.fitEllipse(contour)
+        # Detect the defect within the glove
+        internal_cnt = [contours[i] for i in range(len(contours)) if hierarchy[0][i][3] >= 0]
 
-        # draw contours
-        for i, contour in enumerate(skin_contours):
-            if minEllipse[i] is None:
-                continue
+        if len(contours) > 0:
+            blue_area = max(contours, key=cv.contourArea)
+            (xg, yg, wg, hg) = cv.boundingRect(blue_area)
 
-            (x, y), (mx, my), angle = minEllipse[i]
-            aspect_ratio = mx / my
-            if aspect_ratio < 1 and aspect_ratio > 0:
-                aspect_ratio = 1 / aspect_ratio
+            # Draw rectangle for glove
+            cv.rectangle(self.frame, (xg, yg), (xg + wg, yg + hg), (255, 0, 0), 1)
 
-            # latex_contour = cv.approxPolyDP(
-            #     latex_contour,
-            #     0.01*cv.arcLength(latex_contour, True),
-            #     True
-            # )
+            # Label the glove
+            self.frame = cv.putText(self.frame, 'Glove', (xg, yg - 5), cv.FONT_HERSHEY_SIMPLEX,
+                                    0.5, (255, 0, 0), 1, cv.LINE_AA)
 
-            latex_contour = cv.convexHull(latex_contour)
+            # Find defect
+            if len(internal_cnt) > 0:
+                for i in internal_cnt:
+                    # Check defect size
+                    area = cv.contourArea(i)
+                    print(area)
+                    if area > 40:
+                        xd, yd, wd, hd = cv.boundingRect(i)
+                        # Draw rectangle for defect
+                        cv.rectangle(self.frame, (xd, yd), (xd + wd, yd + hd), (0, 0, 255), 1)
 
-            # cv.drawContours(overlay, [contour], -1, (0, 255, 0, 255), 2)
-            # cv.imshow('tear_overlay', overlay)
-
-            # print(f"Contour {i + 1}: {contour}")
-
-            # print(f"Bounding Box {i + 1}: {minRect[i]}")
-
-            # print(f"Ellipse {i + 1}: {minEllipse[i]}")
-
-            is_within_mask = cv.pointPolygonTest(
-                latex_contour,
-                (x, y),
-                False
-            )
-
-            area = cv.contourArea(contour)
-            if aspect_ratio > 2.5 and area > 200 and is_within_mask >= 0:
-                box = cv.boundingRect(contour)
-
-                cv.ellipse(overlay, minEllipse[i], (0, 255, 0, 255), 2)
-
-                message = 'Tear'
-                text_size, _ = cv.getTextSize(
-                    message,
-                    cv.FONT_HERSHEY_SIMPLEX,
-                    0.5,
-                    1
-                )
-
-                text_width, text_height = text_size
-                cv.putText(
-                    overlay,
-                    message,
-                    (int(box[0] - (text_width / 2)),
-                        (box[1] + box[3]) + text_height + 5),
-                    cv.FONT_HERSHEY_SIMPLEX,
-                    0.5,
-                    (0, 255, 0, 255),
-                    1,
-                    cv.LINE_AA,
-                )
-
-        result = cv.addWeighted(self.img, 1, overlay, 0.5, 0)
-        new_result = cv.resize(result, (500,500))
-        cv.imshow('Result', new_result)
+                        # Label the defect
+                        if area > 400:
+                            # Defect Type: Tearing
+                            self.frame = cv.putText(self.frame, 'Tearing', (xd, yd - 5), cv.FONT_HERSHEY_SIMPLEX,
+                                                    0.5, (0, 0, 255), 1, cv.LINE_AA)
+        cv.imshow('Result', self.frame)
         cv.waitKey(0)
         cv.destroyAllWindows()

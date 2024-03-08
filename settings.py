@@ -5,7 +5,7 @@ type_to_detectors = {
     "Latex Glove": {
         "Stain": latex_dirt_detector.DirtDetector,
         "Missing Finger": missingFinger.MissingFingerDetector,
-        "Tearing": tearingDetector.LatexTearDetector,
+        "Tearing": tearingDetector.TearingGloves,
     },
     "Silicone Glove": {
         "Stain": dirt_detector.DirtDetector,

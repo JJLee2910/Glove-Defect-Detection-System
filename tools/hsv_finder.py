@@ -4,7 +4,7 @@ def on_change(val):
     pass
 
 
-img = cv2.imread('C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\tear.jpg')
+img = cv2.imread('C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\dirt_3.jpg')
 img = cv2.resize(img, (500, 500))
 
 ilowH = 0

@@ -1,3 +1,4 @@
+from Detectors.plastic import missfingerplastic,markedfinger
 from Detectors.silicone import dirt_detector, missing_finger_detector, mould_detector
 from Detectors.latex import latex_dirt_detector, missingFinger, tearingDetector
 
@@ -12,6 +13,9 @@ type_to_detectors = {
         "Mould": mould_detector.MouldDetector,
         "Missing Finger": missing_finger_detector.MissingFingerDetector,
     },
-    "Plastic Glove": {},
+    "Plastic Glove": {
+        "Missing Finger": missfingerplastic.MissingFingerDetector,
+        "Dots": markedfinger.markedfinger,
+    },
     "Cloth Glove": {},
 }

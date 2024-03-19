@@ -1,11 +1,10 @@
 import cv2 as cv
 import numpy as np
 
-img_path = "C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\Dirt_4.jpg"
 fixed_size = (500, 500)
 
 # Read the image
-img = cv.imread(img_path)
+img = cv.imread("C:\\Users\\JJ\\OneDrive\\Desktop\\Glove-Defect-Detection-System\\Images\\Latex\\Dirt_4.jpg")
 
 # Resize the image
 ori_frame = cv.resize(img, fixed_size, interpolation=cv.INTER_CUBIC)

@@ -41,11 +41,16 @@ class markedfinger(Detector):
         result_img = gloves_img.copy()
         cv2.drawContours(result_img, contours, -1, (0, 0, 255), 2)
 
+        # Add text based on dots detection
+        if len(contours) > 0:
+            cv2.putText(result_img, "Dots detected", (70, result_img.shape[0] - 70), cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 0, 255), 20)
+        else:
+            cv2.putText(result_img, "Dots not detected", (100, result_img.shape[0] - 70), cv2.FONT_HERSHEY_SIMPLEX, 10, (0, 255, 0), 20)
+
         # Resize the result image
         result_img = Resizer.apply(result_img)
 
-        # Display the result image with black dots highlighted
-        cv2.imshow("Black Dots Detected", result_img)
+        # Display the result image with black dots highlighted and text
+        cv2.imshow("Black Dots Detection Result", result_img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-

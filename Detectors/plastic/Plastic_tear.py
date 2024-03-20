@@ -57,6 +57,11 @@ class Plastic_tear(Detector):
             # Calculate the blue pixel ratio
             ratio = blue_pixel_num / len(contour) * 100
             if ratio >= BLUE_PIXEL_RATIO_OF_GLOVES:
+                # Draw a circle around the detected tear
+                center, radius = cv2.minEnclosingCircle(contour)
+                center = tuple(map(int, center))
+                radius = int(radius)
+                cv2.circle(self.img, center, radius, (0, 0, 255), 2)  # Red circle for tear
                 result = self.tear_found(self.img)
                 cv2.imshow("Result", result)
                 cv2.waitKey(0)

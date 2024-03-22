@@ -38,14 +38,13 @@ class MissingFingerChecker:
             b = np.sqrt((far[0] - start[0]) * 2 + (far[1] - start[1]) * 2)
             c = np.sqrt((end[0] - far[0]) * 2 + (end[1] - far[1]) * 2)
             angle = np.arccos((b * 2 + c * 2 - a ** 2) / (2 * b * c))  #      cosine theorem
-            if angle <= 90:  # angle less than 90 degree, treat as fingers
+            if angle <= np.pi / 2:  # angle less than 90 degree, treat as fingers
                 cnt += 1
                 cv2.circle(ori_img, far, 4, [0, 0, 255], -1)
 
         # Put text to image
         if cnt >= 4:
-            cv2.putText(ori_img, 'No Missing finger found', (0, 50), cv2.FONT_HERSHEY_SIMPLEX,1, (255, 0, 0) , 2, cv2.LINE_AA)
+            return None
         else:
             cv2.putText(ori_img, 'Missing finger found: '+str(4-cnt), (0, 50), cv2.FONT_HERSHEY_SIMPLEX,1, (255, 0, 0) , 2, cv2.LINE_AA)
-        
-        return ori_img
+            return ori_img

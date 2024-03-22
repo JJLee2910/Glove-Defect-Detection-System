@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from Detectors.base import Detector
-from tools.color_based_binarizer import ColorBasedBinarizer
+from tools.new_color_segmenter import ColorBasedSegmenter
 from tools.missing_finger_checker import MissingFingerChecker
 
 
@@ -12,16 +12,12 @@ class MissingFingerDetector(Detector):
 
     def detect(self):
         try:
-            mask = ColorBasedBinarizer.apply(self.img, 0.1, 0.2, 0.3)
+            mask = ColorBasedSegmenter.apply(self.img,  0.1, 0.2, 0.3)
             result = MissingFingerChecker.apply(self.img, mask)
         except Exception as e:
             print(e)
             result = None
 
         cv2.imshow("mask", mask)
-
-        if result is not None:
-            cv2.imshow("Combined", result)
-        else:
-            cv2.imshow("Original Image", self.img)
+        cv2.imshow("Combined", result)
         cv2.waitKey(0)

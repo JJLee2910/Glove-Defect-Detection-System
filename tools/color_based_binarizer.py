@@ -1,10 +1,11 @@
 import numpy as np
 from skimage.color import rgb2hsv
+import cv2
 
 class ColorBasedBinarizer:
     @staticmethod  
     def apply(img, lower_hue, upper_hue, saturation_threshold):
-        hsv_image = rgb2hsv(img)
+        hsv_image = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
         lower_mask = hsv_image[..., 0] > lower_hue
         upper_mask = hsv_image[..., 0] < upper_hue

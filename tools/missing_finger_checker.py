@@ -34,10 +34,10 @@ class MissingFingerChecker:
             start = tuple(contours[s][0])
             end = tuple(contours[e][0])
             far = tuple(contours[f][0])
-            a = np.sqrt((end[0] - start[0]) * 2 + (end[1] - start[1]) * 2)
-            b = np.sqrt((far[0] - start[0]) * 2 + (far[1] - start[1]) * 2)
-            c = np.sqrt((end[0] - far[0]) * 2 + (end[1] - far[1]) * 2)
-            angle = np.arccos((b * 2 + c * 2 - a ** 2) / (2 * b * c))  #      cosine theorem
+            a = np.sqrt((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2)
+            b = np.sqrt((far[0] - start[0]) ** 2 + (far[1] - start[1]) ** 2)
+            c = np.sqrt((end[0] - far[0]) ** 2 + (end[1] - far[1]) ** 2)
+            angle = np.arccos((b ** 2 + c ** 2 - a ** 2) / (2 * b * c))  #      cosine theorem
             if angle <= np.pi / 2:  # angle less than 90 degree, treat as fingers
                 cnt += 1
                 cv2.circle(ori_img, far, 4, [0, 0, 255], -1)

@@ -1,95 +1,69 @@
 import cv2
-import numpy as np  # Import NumPy
+import numpy as np
+from Detectors.base import Detector
 from tools.resizer import Resizer
-
-# Define the Detector class
-class Detector:
-    def __init__(self):
-        pass
-
-    def detect(self):
-        pass
-
-RESULT_IMG_TARGET_HEIGHT = 500
-DIRT_CONTOUR_AREA_THRESHOLD = 5000  # Adjust this threshold as needed
 
 class DirtyPlasticGlovesDetector(Detector):
     def __init__(self, img) -> None:
-        super().__init__()  # Call the constructor of the base class
-        # Resize the input image to the target height
-        self.img = Resizer.apply(img, RESULT_IMG_TARGET_HEIGHT)
+        self.img = img
 
     def detect(self):
-        # Convert the resized image to grayscale
-        gray_image = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        # Convert the image to HSV color space for better color segmentation
+        hsv_img = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV)
 
-        # Apply thresholding to create a binary image
-        _, binary_image = cv2.threshold(gray_image, 100, 255, cv2.THRESH_BINARY_INV)
+        # Define the lower and upper bounds of the color range for white and beige-ish colors
+        lower_white = np.array([0, 0, 180])  # Adjust these values based on your white color range
+        upper_white = np.array([180, 50, 255])  # Adjust these values based on your white color range
+        lower_beige = np.array([5, 50, 100])  # Adjust these values based on your beige-ish color range
+        upper_beige = np.array([30, 150, 200])  # Adjust these values based on your beige-ish color range
 
-        # Apply morphological operations to clean up the binary image
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-        morph_image = cv2.morphologyEx(binary_image, cv2.MORPH_CLOSE, kernel)
+        # Create masks to identify white and beige-ish colors separately
+        white_mask = cv2.inRange(hsv_img, lower_white, upper_white)
+        beige_mask = cv2.inRange(hsv_img, lower_beige, upper_beige)
+        bg_mask = cv2.bitwise_or(white_mask, beige_mask)
+        fg_mask = cv2.bitwise_not(bg_mask)
 
-        # Find contours in the morphological image
-        contours, _ = cv2.findContours(morph_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        # Apply the foreground mask to extract the gloves
+        gloves_img = cv2.bitwise_and(self.img, self.img, mask=fg_mask)
 
-        if not contours:
-            result = self.no_dirt_detected(self.img)
-            cv2.imshow("Result", result)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
-            return
+        # Convert the gloves image to grayscale
+        grey = cv2.cvtColor(gloves_img, cv2.COLOR_BGR2GRAY)
 
-        # Segment and analyze each contour
+        # Apply Gaussian blur to reduce noise and enhance dot detection
+        blurred = cv2.GaussianBlur(grey, (11, 11), 0)
+
+        # Threshold the blurred image to create a binary mask for black dots
+        _, thresh = cv2.threshold(blurred, 30, 255, cv2.THRESH_BINARY_INV)
+
+        # Find contours in the binary image
+        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Draw circles around the detected black dots on the gloves image
+        result_img = self.img.copy()
         for contour in contours:
-            # Create a mask for the contour
-            mask = np.zeros_like(gray_image)
-            cv2.drawContours(mask, [contour], -1, 255, thickness=cv2.FILLED)
+            # Calculate the minimum enclosing circle for each contour
+            ((x, y), radius) = cv2.minEnclosingCircle(contour)
+            center = (int(x), int(y))
+            radius = int(radius)
 
-            # Extract the segmented region
-            segmented_region = cv2.bitwise_and(gray_image, gray_image, mask=mask)
+            # Draw the circle with a larger radius
+            cv2.circle(result_img, center, radius + 10, (0, 0, 255), 5)  # Increase the radius by 10
 
-            # Calculate the area of the segmented region
-            area = cv2.contourArea(contour)
+        # Add text based on dots detection
+        if len(contours) > 0:
+            text = "Dirty gloves detected"
+            text_color = (0, 0, 255)  # Red color for dirty gloves
+        else:
+            text = "Clean gloves detected"
+            text_color = (0, 255, 0)  # Green color for clean gloves
 
-            # Detect dirt based on the area threshold
-            if area >= DIRT_CONTOUR_AREA_THRESHOLD:
-                # Draw a contour around the detected area
-                cv2.drawContours(self.img, [contour], -1, (0, 255, 0), 2)  # Green contour for detected area
-                result = self.dirt_detected(self.img)
-                cv2.imshow("Result", result)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
-                return
+        # Add text to the result image
+        cv2.putText(result_img, text, (50, result_img.shape[0] - 50), cv2.FONT_HERSHEY_SIMPLEX, 6, text_color, 7, cv2.LINE_AA)
 
-        result = self.no_dirt_detected(self.img)
-        cv2.imshow("Result", result)
+        # Resize the result image
+        result_img = Resizer.apply(result_img)
+
+        # Display the result image with text and circles
+        cv2.imshow("Gloves and Dots Detection Result", result_img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-
-    def dirt_detected(self, img):
-        cv2.putText(
-            img,
-            "Dirty plastic gloves detected",
-            (50, 50),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 0, 255),
-            1,
-            cv2.LINE_AA,
-        )
-        return img
-
-    def no_dirt_detected(self, img):
-        cv2.putText(
-            img,
-            "No dirt detected on plastic gloves",
-            (50, 50),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            (0, 255, 0),
-            2,
-            cv2.LINE_AA,
-        )
-        return img
-

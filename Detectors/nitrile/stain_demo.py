@@ -4,7 +4,7 @@ import numpy as np
 from skimage.color import rgb2hsv
 
 def apply(img, lower_hue, upper_hue, saturation_threshold):
-        hsv_image = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        hsv_image = rgb2hsv(img)
 
         lower_mask = hsv_image[..., 0] > lower_hue
         upper_mask = hsv_image[..., 0] < upper_hue
@@ -15,12 +15,16 @@ def apply(img, lower_hue, upper_hue, saturation_threshold):
 
         return masked_image
 
-image = cv2.imread("D:\\OneDrive - Asia Pacific University\\Degree Year 3\\Image Processing, Computer Vision and Pattern Recognition\\Assignment\\Source Code\\Glove-Defect-Detection-System\\Images\\Nitrile\\stain_1.jpg")
+image = cv2.imread("D:\\OneDrive - Asia Pacific University\\Degree Year 3\\Image Processing, Computer Vision and Pattern Recognition\\Assignment\\Source Code\\Glove-Defect-Detection-System\\Images\\Nitrile\\stain_6.jpg")
+
 image = cv2.resize(image, None, fx=0.3, fy=0.3)
 
+cv2.imshow('original',image)
 
 # binarize the images
-masked_img = apply(image,  85, 130, 10)
+masked_img = apply(image,  0, 0.2, 0.05)
+
+
 
 # Convert to grayscale
 gray = cv2.cvtColor(masked_img, cv2.COLOR_BGR2GRAY)       
@@ -31,12 +35,14 @@ ret, th = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY)
 # Reduce noise
 blur = cv2.medianBlur(th,15) 
 
+
+
 # Find stain with contour
 contours, hierarchy = cv2.findContours(blur, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 stainCounter = 0
 for contour in contours:
-    if (cv2.contourArea(contour) < 5000 and cv2.contourArea(contour) > 20):
+    if (cv2.contourArea(contour) < 20000 and cv2.contourArea(contour) > 20):
         # draw out all the contour
         perimeter = cv2.arcLength(contour,True)
         vertices = cv2.approxPolyDP(contour, perimeter * 0.02, True)
@@ -56,7 +62,7 @@ if (stainCounter == 0):
 cv2.putText(image, text, (0, 50), cv2.FONT_HERSHEY_SIMPLEX,1, (255, 0, 0) , 2, cv2.LINE_AA)
 
 
-cv2.imshow('ori',masked_img)
-cv2.imshow('img', blur)
+# cv2.imshow('ori',masked_img)
+# cv2.imshow('img', blur)
 cv2.imshow('img2', image)
 cv2.waitKey(0)

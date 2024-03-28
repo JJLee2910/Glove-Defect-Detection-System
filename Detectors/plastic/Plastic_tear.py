@@ -1,6 +1,6 @@
 import cv2
-from tools.color_based_binarizer import ColorBasedBinarizer
 from tools.resizer import Resizer
+from tools.new_color_segmenter import ColorBasedSegmenter
 
 # Define the Detector class
 class Detector:
@@ -23,7 +23,7 @@ class Plastic_tear(Detector):
 
     def detect(self):
         # Binarize the images based on color
-        binarized_image = ColorBasedBinarizer.apply(self.img, 0.55, 1.0, 0.25)  # Adjust threshold parameters
+        binarized_image = ColorBasedSegmenter.apply(self.img, 0.55, 1.0, 0.25)  # Adjust threshold parameters
 
         # Apply morphological operations to clean up the binary image
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))

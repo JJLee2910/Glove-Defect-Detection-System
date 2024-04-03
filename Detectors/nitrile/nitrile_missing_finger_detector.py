@@ -9,7 +9,7 @@ class MissingFingerDetector(Detector):
         self.img = img
 
     def detect(self):
-        self.img = cv2.resize(self.img, None, fx=0.2, fy=0.2)
+        self.img = cv2.resize(self.img, None, fx=0.3, fy=0.3)
         # binarize the images
         mask = ColorBasedSegmenter.apply(self.img, 0, 0.2, 0.05)
         result = MissingFingerChecker.apply(self.img, mask)

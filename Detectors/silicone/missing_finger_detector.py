@@ -19,21 +19,17 @@ class MissingFingerDetector(Detector):
             blurred_ = cv.GaussianBlur(grey, value, 0)
 
             contours, hierarchy = cv.findContours(blurred_.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
-            count1 = max(contours, key=lambda x: cv.contourArea(x))
-            hull = cv.convexHull(count1)
-            drawing = np.zeros(mask.shape, np.uint8)
-            cv.drawContours(drawing, [hull], 0, (0, 0, 255), 0)
-            hull = cv.convexHull(count1, returnPoints=False)
-            defects = cv.convexityDefects(count1, hull)
+            cont1 = max(contours, key=lambda x: cv.contourArea(x))
+            hull = cv.convexHull(cont1, returnPoints=False)
+            defects = cv.convexityDefects(cont1, hull)
 
             count_defects = 0
-            cv.drawContours(blurred_, contours, -1, (0, 255, 0), 3)
-
             for i in range(defects.shape[0]):
+                # find angle
                 s, e, f, d = defects[i, 0]
-                start = tuple(count1[s][0])
-                end = tuple(count1[e][0])
-                far = tuple(count1[f][0])
+                start = tuple(cont1[s][0])
+                end = tuple(cont1[e][0])
+                far = tuple(cont1[f][0])
                 a = math.sqrt((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2)
                 b = math.sqrt((far[0] - start[0]) ** 2 + (far[1] - start[1]) ** 2)
                 c = math.sqrt((end[0] - far[0]) ** 2 + (end[1] - far[1]) ** 2)
@@ -47,10 +43,10 @@ class MissingFingerDetector(Detector):
 
             finger_count = count_defects + 1
             if finger_count == 5:
-                cv.putText(mask, "Missing Finger Not Detected", (50, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0))
+                cv.putText(mask, "Missing Finger Not Detected", (50, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), thickness=2)
             else:
-                cv.putText(mask, "Missing Finger Detected", (50, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
-                cv.putText(mask, f"No. of Fingers: {finger_count}", (50, 100), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0))
+                cv.putText(mask, "Missing Finger Detected", (50, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
+                cv.putText(mask, f"No. of Fingers: {finger_count}", (50, 100), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), thickness=2)
             
         except Exception as e:
             print(e)
@@ -59,3 +55,4 @@ class MissingFingerDetector(Detector):
         cv.imshow("mask", mask)
 
         cv.waitKey(0)
+

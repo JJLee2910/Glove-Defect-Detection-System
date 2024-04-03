@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from Detectors.base import Detector
-from tools.color_based_binarizer import ColorBasedBinarizer
+from tools.new_color_segmenter import ColorBasedSegmenter
 from tools.resizer import Resizer
 from tools.stain_finder import StainFinder
 
@@ -18,7 +18,7 @@ class MouldDetector(Detector):
 
     def detect(self):
         # binarize the images
-        binarized_image = ColorBasedBinarizer.apply(self.img, 0.65, 1.0, 0.15)
+        binarized_image = ColorBasedSegmenter.apply(self.img, 0.65, 1.0, 0.15)
 
         image = cv2.cvtColor(binarized_image, cv2.COLOR_BGR2GRAY)
         blur = cv2.medianBlur(image, 15)

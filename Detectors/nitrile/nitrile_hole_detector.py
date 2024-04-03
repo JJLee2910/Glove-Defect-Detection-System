@@ -6,7 +6,7 @@ from Detectors.base import Detector
 class HoleDetector(Detector):
     def __init__(self, img) -> None:
         self.img = img
-        self.img = cv2.resize(img, None, fx=0.2, fy=0.2)
+        self.img = cv2.resize(img, None, fx=0.3, fy=0.3)
     def detect(self):
         # convert image to hsv colour space
         image_hsv = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV)

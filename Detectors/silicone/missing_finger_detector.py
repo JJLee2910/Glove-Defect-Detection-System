@@ -2,7 +2,7 @@ import math
 import cv2 as cv
 import numpy as np
 from Detectors.base import Detector
-from tools.color_based_binarizer import ColorBasedBinarizer
+from tools.new_color_segmenter import ColorBasedSegmenter
 from tools.missing_finger_checker import MissingFingerChecker
 
 
@@ -12,7 +12,7 @@ class MissingFingerDetector(Detector):
 
     def detect(self):
         try:
-            mask = ColorBasedBinarizer.apply(self.img, 0.65, 1.0, 0.15)
+            mask = ColorBasedSegmenter.apply(self.img, 0.65, 1.0, 0.15)
 
             grey = cv.cvtColor(mask, cv.COLOR_BGR2GRAY)
             value = (11, 11)
